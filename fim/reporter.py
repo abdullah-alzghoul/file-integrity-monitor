@@ -51,6 +51,13 @@ def _truncate_hash(hash_str: str, length: int = 16) -> str:
     return hash_str[:length] + "..."
 
 
+def _sanitize_csv_cell(value: str) -> str:
+    """Prefix dangerous CSV formula characters with a tab to prevent injection."""
+    if value and value[0] in {"=", "+", "-", "@"}:
+        return "\t" + value
+    return value
+
+
 def _escape_html(text: str) -> str:
     return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
 
@@ -137,24 +144,24 @@ def _csv_report(result: ScanResult) -> str:
         prev = change.previous_record
 
         row = {
-            "timestamp": result.timestamp,
-            "scan_path": result.scan_path,
-            "baseline_path": result.baseline_path or "",
+            "timestamp": _sanitize_csv_cell(result.timestamp),
+            "scan_path": _sanitize_csv_cell(result.scan_path),
+            "baseline_path": _sanitize_csv_cell(result.baseline_path or ""),
             "files_scanned": result.files_scanned,
-            "change_type": change.change_type.value,
-            "path": record.path if record else "",
-            "hash": record.hash if record else "",
+            "change_type": _sanitize_csv_cell(change.change_type.value),
+            "path": _sanitize_csv_cell(record.path if record else ""),
+            "hash": _sanitize_csv_cell(record.hash if record else ""),
             "size": record.size if record else "",
             "permissions": record.permissions if record else "",
             "mtime": record.mtime if record else "",
-            "algorithm": record.algorithm if record else "",
-            "previous_path": prev.path if prev else "",
-            "previous_hash": prev.hash if prev else "",
+            "algorithm": _sanitize_csv_cell(record.algorithm if record else ""),
+            "previous_path": _sanitize_csv_cell(prev.path if prev else ""),
+            "previous_hash": _sanitize_csv_cell(prev.hash if prev else ""),
             "previous_size": prev.size if prev else "",
             "previous_permissions": prev.permissions if prev else "",
             "previous_mtime": prev.mtime if prev else "",
-            "previous_algorithm": prev.algorithm if prev else "",
-            "diff_preview": change.diff_preview or "",
+            "previous_algorithm": _sanitize_csv_cell(prev.algorithm if prev else ""),
+            "diff_preview": _sanitize_csv_cell(change.diff_preview or ""),
         }
         writer.writerow(row)
 

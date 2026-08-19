@@ -171,6 +171,66 @@ class TestReportOutputPath(unittest.TestCase):
             report(result, "xml")
         self.assertIn("xml", str(ctx.exception))
 
+class TestCsvSanitization(unittest.TestCase):
+    def test_formula_prefix_blocked(self):
+        record = FileRecord(
+            path="=cmd|' /C calc'!A0",
+            hash="hash",
+            size=1,
+            permissions=0o644,
+            mtime=1.0,
+            algorithm="sha256",
+        )
+        result = ScanResult(
+            baseline_path="baseline.json",
+            scan_path=".",
+            changes=[Change(ChangeType.ADDED, record, None)],
+            timestamp="2026-01-01T00:00:00",
+            files_scanned=1,
+        )
+        output = report(result, "csv")
+        self.assertIn("\t=cmd", output)
+        self.assertNotIn("\n=cmd", output)
+
+    def test_plus_prefix_blocked(self):
+        record = FileRecord(
+            path="+1+1",
+            hash="hash",
+            size=1,
+            permissions=0o644,
+            mtime=1.0,
+            algorithm="sha256",
+        )
+        result = ScanResult(
+            baseline_path="baseline.json",
+            scan_path=".",
+            changes=[Change(ChangeType.ADDED, record, None)],
+            timestamp="2026-01-01T00:00:00",
+            files_scanned=1,
+        )
+        output = report(result, "csv")
+        self.assertIn("\t+1+1", output)
+
+    def test_normal_path_unchanged(self):
+        record = FileRecord(
+            path="normal.txt",
+            hash="hash",
+            size=1,
+            permissions=0o644,
+            mtime=1.0,
+            algorithm="sha256",
+        )
+        result = ScanResult(
+            baseline_path="baseline.json",
+            scan_path=".",
+            changes=[Change(ChangeType.ADDED, record, None)],
+            timestamp="2026-01-01T00:00:00",
+            files_scanned=1,
+        )
+        output = report(result, "csv")
+        self.assertIn("normal.txt", output)
+        self.assertNotIn("\tnormal.txt", output)
+
 
 if __name__ == "__main__":
     unittest.main()
