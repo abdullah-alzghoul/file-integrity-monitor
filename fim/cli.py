@@ -85,7 +85,10 @@ def _build_parser() -> argparse.ArgumentParser:
 
 
 def _config_from_args(args) -> dict:
-    """Map argparse Namespace to load_config kwargs."""
+    """Map argparse Namespace to load_config kwargs.
+
+    Only includes values that were explicitly provided (not None).
+    """
     mapping = {
         "scan_path": "scan_path",
         "baseline": "baseline_path",
@@ -98,7 +101,11 @@ def _config_from_args(args) -> dict:
         "config": "config_path",
         "audit_log": "audit_log",
     }
-    return {v: getattr(args, k) for k, v in mapping.items() if hasattr(args, k)}
+    return {
+        v: getattr(args, k)
+        for k, v in mapping.items()
+        if hasattr(args, k) and getattr(args, k) is not None
+    }
 
 
 def run(argv: list[str] | None = None) -> int:
