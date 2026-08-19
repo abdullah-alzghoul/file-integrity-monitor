@@ -45,6 +45,7 @@ def load_config(
     rules_path: Optional[str] = None,
     audit_log: str = "fim-audit.log",
     config_path: Optional[str] = None,
+    **overrides,
 ) -> Config:
     """Load configuration from CLI args, environment variables, and JSON config file.
 
@@ -88,6 +89,10 @@ def load_config(
         env_val = os.getenv(env_name)
         if env_val is not None and env_val != "":
             merged[cfg_key] = env_val
+
+    for key, value in overrides.items():
+        if value is not None:
+            merged[key] = value
 
     merged["threads"] = int(merged["threads"])
 
