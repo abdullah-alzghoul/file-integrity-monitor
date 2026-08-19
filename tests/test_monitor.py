@@ -2,6 +2,7 @@
 
 import os
 import shutil
+import stat
 import tempfile
 import unittest
 from pathlib import Path
@@ -71,7 +72,10 @@ class TestScanDirectory(unittest.TestCase):
         self.baseline_path = os.path.join(self.temp_dir, "baseline.json")
 
     def tearDown(self):
-        shutil.rmtree(self.temp_dir)
+        def _onexc(func, path, exc_info):
+            os.chmod(path, stat.S_IWRITE)
+            func(path)
+        shutil.rmtree(self.temp_dir, onexc=_onexc)
 
     def _create_baseline(self):
         create_baseline(
@@ -189,8 +193,11 @@ class TestScanDirectory(unittest.TestCase):
             key=None,
             audit_logger=None,
         )
-        self.assertIsNotNone(result.timestamp)
-        self.assertGreaterEqual(result.files_scanned, 0)
+        perm_changes = [
+            c for c in result.changes
+            if c.change_type == ChangeType.PERMISSION_CHANGED
+        ]
+        self.assertEqual(len(perm_changes), 1)
 
     def test_respects_rules(self):
         (Path(self.scan_dir) / "keep.txt").write_text("keep")
