@@ -9,6 +9,17 @@ from fim.diff import generate_diff_preview, _is_binary
 
 
 class TestIsBinary(unittest.TestCase):
+    def test_unreadable_file(self):
+        with tempfile.NamedTemporaryFile(mode="w", delete=False) as f:
+            f.write("content")
+            path = f.name
+        os.chmod(path, 0o000)
+        try:
+            self.assertTrue(_is_binary(path))
+        finally:
+            os.chmod(path, 0o644)
+            os.unlink(path)
+
     def test_text_file(self):
         with tempfile.NamedTemporaryFile(mode="w", delete=False) as f:
             f.write("hello world")

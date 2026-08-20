@@ -12,6 +12,18 @@ from fim.cli import run
 
 
 class TestBaselineCommand(unittest.TestCase):
+    def test_unexpected_error_returns_2(self):
+        import fim.monitor
+        original = fim.monitor.create_baseline
+        def _raise(*args, **kwargs):
+            raise RuntimeError("unexpected")
+        fim.monitor.create_baseline = _raise
+        try:
+            rc = run(["baseline", self.scan_dir, "-o", self.baseline_path])
+            self.assertEqual(rc, 2)
+        finally:
+            fim.monitor.create_baseline = original
+
     def test_baseline_with_inline_exclude_from_config(self):
         (Path(self.scan_dir) / "keep.txt").write_text("keep")
         (Path(self.scan_dir) / "ignore.tmp").write_text("ignore")

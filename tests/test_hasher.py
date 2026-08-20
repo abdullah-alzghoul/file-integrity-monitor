@@ -62,6 +62,16 @@ class TestHashFile(unittest.TestCase):
 
 
 class TestHashDirectory(unittest.TestCase):
+    def test_skips_unreadable_file(self):
+        path = Path(self.temp_dir) / "secret.txt"
+        path.write_text("secret")
+        os.chmod(path, 0o000)
+        try:
+            result = hash_directory(self.temp_dir, RuleSet([]), threads=1)
+            self.assertEqual(len(result), 0)
+        finally:
+            os.chmod(path, 0o644)
+
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
 
