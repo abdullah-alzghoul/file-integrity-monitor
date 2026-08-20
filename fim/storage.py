@@ -1,4 +1,10 @@
-"""Baseline storage: JSON read/write with optional HMAC signing."""
+"""Baseline storage: JSON read/write with optional HMAC signing.
+
+Security note: A signed baseline prevents tampering of content, but an
+attacker with filesystem access could perform a rollback attack by
+replacing the baseline with an older signed version. The audit log
+provides a partial mitigation by recording baseline creation events.
+"""
 
 from __future__ import annotations
 

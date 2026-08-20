@@ -1,4 +1,9 @@
-"""Append-only audit logging for file integrity monitoring operations."""
+"""Append-only audit logging for file integrity monitoring operations.
+
+Security note: Threading.Lock protects against concurrent threads within
+a single process. Multiple simultaneous CLI invocations could interleave
+JSON Lines in the same audit log file.
+"""
 
 from __future__ import annotations
 

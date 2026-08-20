@@ -1,4 +1,8 @@
-"""Cryptographic hashing for file integrity monitoring."""
+"""Cryptographic hashing for file integrity monitoring.
+
+Security note: No maximum file size limit is enforced. Hashing very large
+files will consume CPU and time proportionally.
+"""
 
 from __future__ import annotations
 
