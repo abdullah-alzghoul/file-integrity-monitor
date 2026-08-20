@@ -122,6 +122,10 @@ def run(argv: list[str] | None = None) -> int:
     config_kwargs = _config_from_args(args)
     config = load_config(**config_kwargs)
     rules = load_rules(config.rules_path)
+    if config.exclude:
+        inline = RuleSet(config.exclude)
+        combined = list(dict.fromkeys(inline.excludes + rules.excludes))
+        rules = RuleSet(combined)
     audit = AuditLogger(config.audit_log)
 
     if hasattr(args, "key") and args.key is not None:

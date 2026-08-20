@@ -18,6 +18,7 @@ class TestConfigValidation(unittest.TestCase):
         self.assertEqual(cfg.format, "console")
         self.assertIsNone(cfg.baseline_path)
         self.assertIsNone(cfg.key)
+        self.assertEqual(cfg.exclude, [])
 
     def test_threads_must_be_positive(self):
         with self.assertRaises(ValueError) as ctx:
@@ -83,6 +84,42 @@ class TestEnvironmentVariables(unittest.TestCase):
     def test_env_invalid_threads_raises(self):
         with self.assertRaises(ValueError):
             load_config()
+
+
+class TestConfigExclude(unittest.TestCase):
+    def test_inline_exclude_from_config(self):
+        data = {"exclude": ["*.tmp", ".git/"]}
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
+            json.dump(data, f)
+            path = f.name
+        try:
+            cfg = load_config(config_path=path)
+            self.assertEqual(cfg.exclude, ["*.tmp", ".git/"])
+        finally:
+            os.unlink(path)
+
+    def test_invalid_exclude_type(self):
+        data = {"exclude": "not a list"}
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
+            json.dump(data, f)
+            path = f.name
+        try:
+            with self.assertRaises(ValueError) as ctx:
+                load_config(config_path=path)
+            self.assertIn("exclude", str(ctx.exception).lower())
+        finally:
+            os.unlink(path)
+
+    def test_invalid_exclude_element(self):
+        data = {"exclude": ["*.tmp", 123]}
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
+            json.dump(data, f)
+            path = f.name
+        try:
+            with self.assertRaises(ValueError):
+                load_config(config_path=path)
+        finally:
+            os.unlink(path)
 
 
 if __name__ == "__main__":

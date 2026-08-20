@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional
 
@@ -23,6 +23,7 @@ class Config:
     rules_path: Optional[str]
     audit_log: str
     config_path: Optional[str]
+    exclude: list[str] = field(default_factory=list)
 
     def __post_init__(self):
         if self.threads < 1:
@@ -31,6 +32,8 @@ class Config:
             raise ValueError(f"unsupported algorithm: {self.algorithm}")
         if self.format not in {"console", "json", "csv", "html"}:
             raise ValueError(f"unsupported format: {self.format}")
+        if not isinstance(self.exclude, list) or not all(isinstance(x, str) for x in self.exclude):
+            raise ValueError("exclude must be a list of strings")
 
 
 def load_config(
@@ -62,6 +65,7 @@ def load_config(
         "rules_path": rules_path,
         "audit_log": audit_log,
         "config_path": config_path,
+        "exclude": [],
     }
 
     file_config = {}
@@ -100,6 +104,14 @@ def load_config(
         key_file = key_value[1:]
         with open(key_file, "r", encoding="utf-8") as f:
             merged["key"] = f.read().strip()
+
+    # Inline exclude patterns from config file (no env var support)
+    if "exclude" in file_config:
+        val = file_config["exclude"]
+        if isinstance(val, list) and all(isinstance(x, str) for x in val):
+            merged["exclude"] = val
+        else:
+            raise ValueError("config 'exclude' must be a list of strings")
 
     merged["threads"] = int(merged["threads"])
 
