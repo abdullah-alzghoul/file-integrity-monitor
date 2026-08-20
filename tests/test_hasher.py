@@ -63,6 +63,9 @@ class TestHashFile(unittest.TestCase):
 
 class TestHashDirectory(unittest.TestCase):
     def test_skips_unreadable_file(self):
+        import sys
+        if sys.platform == "win32":
+            self.skipTest("Windows ACLs do not support owner-read denial via chmod")
         path = Path(self.temp_dir) / "secret.txt"
         path.write_text("secret")
         os.chmod(path, 0o000)

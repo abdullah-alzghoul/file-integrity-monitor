@@ -10,6 +10,9 @@ from fim.diff import generate_diff_preview, _is_binary
 
 class TestIsBinary(unittest.TestCase):
     def test_unreadable_file(self):
+        import sys
+        if sys.platform == "win32":
+            self.skipTest("Windows ACLs do not support owner-read denial via chmod")
         with tempfile.NamedTemporaryFile(mode="w", delete=False) as f:
             f.write("content")
             path = f.name
