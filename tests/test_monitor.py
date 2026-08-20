@@ -92,6 +92,10 @@ class TestScanDirectory(unittest.TestCase):
         (Path(self.scan_dir) / "file.txt").write_text("content")
         self._create_baseline()
 
+        audit_path = os.path.join(self.temp_dir, "audit.log")
+        from fim.audit import AuditLogger
+        audit = AuditLogger(audit_path)
+
         result = scan_directory(
             scan_path=self.scan_dir,
             baseline_path=self.baseline_path,
@@ -99,10 +103,11 @@ class TestScanDirectory(unittest.TestCase):
             algorithm="sha256",
             threads=1,
             key=None,
-            audit_logger=None,
+            audit_logger=audit,
         )
         self.assertEqual(len(result.changes), 0)
         self.assertEqual(result.files_scanned, 1)
+        self.assertTrue(os.path.exists(audit_path))
 
     def test_file_added(self):
         self._create_baseline()

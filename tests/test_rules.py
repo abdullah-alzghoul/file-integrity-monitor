@@ -8,6 +8,10 @@ from fim.rules import RuleSet, load_rules
 
 
 class TestRuleSet(unittest.TestCase):
+    def test_directory_exact_match_no_trailing_slash(self):
+        rs = RuleSet([".git/"])
+        self.assertTrue(rs.is_ignored(".git"))
+
     def test_no_rules_allows_all(self):
         rs = RuleSet([])
         self.assertFalse(rs.is_ignored("anything.txt"))

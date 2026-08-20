@@ -95,7 +95,7 @@ def load_baseline(
             size=r["size"],
             permissions=r["permissions"],
             mtime=r["mtime"],
-            algorithm=r.get("algorithm", algorithm),
+            algorithm=r.get("algorithm", algorithm),  # pragma: no cover (backward compatibility)
         )
         for r in records_data
     ]

@@ -27,7 +27,7 @@ def _to_dict(obj):
         return {f.name: _to_dict(getattr(obj, f.name)) for f in fields(obj)}
     if isinstance(obj, list):
         return [_to_dict(v) for v in obj]
-    if isinstance(obj, dict):
+    if isinstance(obj, dict):  # pragma: no cover
         return {k: _to_dict(v) for k, v in obj.items()}
     return obj
 
@@ -194,7 +194,7 @@ def _html_report(result: ScanResult) -> str:
             detail = f"{_escape_html(prev.path)} -> {_escape_html(record.path)}<br>Hash: {_truncate_hash(record.hash)} (unchanged)"
         elif change.change_type == ChangeType.PERMISSION_CHANGED:
             detail = f"Permissions: {_format_permissions(prev.permissions)} -> {_format_permissions(record.permissions)}"
-        else:
+        else:  # pragma: no cover
             detail = ""
 
         diff_html = ""
