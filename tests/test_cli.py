@@ -58,6 +58,18 @@ class TestBaselineCommand(unittest.TestCase):
         self.assertNotIn("ignore.tmp", basenames)
 
 
+    def test_baseline_with_key_file(self):
+        (Path(self.scan_dir) / "file.txt").write_text("content")
+        key_path = os.path.join(self.temp_dir, "key.txt")
+        with open(key_path, "w") as f:
+            f.write("mysecretkey")
+        rc = run(["baseline", self.scan_dir, "-o", self.baseline_path, "--key-file", key_path])
+        self.assertEqual(rc, 0)
+        with open(self.baseline_path, "r") as f:
+            data = json.load(f)
+        self.assertIn("signature", data)
+
+
 class TestScanCommand(unittest.TestCase):
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()

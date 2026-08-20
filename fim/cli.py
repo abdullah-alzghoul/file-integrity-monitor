@@ -36,7 +36,10 @@ def _build_parser() -> argparse.ArgumentParser:
         "-t", "--threads", type=int, help="Number of parallel threads"
     )
     baseline_parser.add_argument(
-        "-k", "--key", help="HMAC signing key"
+        "-k", "--key", help="HMAC signing key (exposes key in shell history; prefer --key-file or FIM_KEY)"
+    )
+    baseline_parser.add_argument(
+        "--key-file", help="Path to file containing HMAC signing key"
     )
     baseline_parser.add_argument(
         "-r", "--rules", help="Path to exclude rules file"
@@ -69,7 +72,10 @@ def _build_parser() -> argparse.ArgumentParser:
         "-t", "--threads", type=int, help="Number of parallel threads"
     )
     scan_parser.add_argument(
-        "-k", "--key", help="HMAC verification key"
+        "-k", "--key", help="HMAC verification key (exposes key in shell history; prefer --key-file or FIM_KEY)"
+    )
+    scan_parser.add_argument(
+        "--key-file", help="Path to file containing HMAC verification key"
     )
     scan_parser.add_argument(
         "-r", "--rules", help="Path to exclude rules file"
@@ -97,6 +103,7 @@ def _config_from_args(args) -> dict:
         "algorithm": "algorithm",
         "threads": "threads",
         "key": "key",
+        "key_file": "key",
         "rules": "rules_path",
         "config": "config_path",
         "audit_log": "audit_log",
@@ -116,6 +123,9 @@ def run(argv: list[str] | None = None) -> int:
     config = load_config(**config_kwargs)
     rules = load_rules(config.rules_path)
     audit = AuditLogger(config.audit_log)
+
+    if hasattr(args, "key") and args.key is not None:
+        print("Warning: passing keys via -k exposes them in shell history. Consider --key-file or FIM_KEY.", file=sys.stderr)
 
     try:
         if args.command == "baseline":

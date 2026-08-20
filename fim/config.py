@@ -94,6 +94,13 @@ def load_config(
         if value is not None:
             merged[key] = value
 
+    # Resolve @file syntax for key
+    key_value = merged.get("key")
+    if isinstance(key_value, str) and key_value.startswith("@"):
+        key_file = key_value[1:]
+        with open(key_file, "r", encoding="utf-8") as f:
+            merged["key"] = f.read().strip()
+
     merged["threads"] = int(merged["threads"])
 
     return Config(**merged)
