@@ -59,7 +59,7 @@ def _sanitize_csv_cell(value: str) -> str:
 
 
 def _escape_html(text: str) -> str:
-    return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
+    return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;").replace("'", "&#x27;")
 
 
 def _console_report(result: ScanResult) -> str:

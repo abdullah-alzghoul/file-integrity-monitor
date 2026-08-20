@@ -112,6 +112,19 @@ class TestCsvReport(unittest.TestCase):
 
 
 class TestHtmlReport(unittest.TestCase):
+    def test_html_escapes_single_quotes(self):
+        record = FileRecord("file's.txt", "hash", 100, 0o644, 1.0, "sha256")
+        result = ScanResult(
+            baseline_path="baseline.json",
+            scan_path=".",
+            changes=[Change(ChangeType.ADDED, record, None)],
+            timestamp="2026-01-01T00:00:00",
+            files_scanned=1,
+        )
+        output = report(result, "html")
+        self.assertIn("file&#x27;s.txt", output)
+        self.assertNotIn("file's.txt", output)
+
     def test_html_structure(self):
         result = ScanResult(
             baseline_path="baseline.json",
