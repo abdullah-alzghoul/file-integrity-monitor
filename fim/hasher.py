@@ -63,9 +63,12 @@ def hash_directory(
         ]
 
         for filename in filenames:
+            file_path = Path(dirpath) / filename
+            if file_path.is_symlink():
+                continue
             rel_path = rel_dir / filename
             if not rules.is_ignored(rel_path):
-                files_to_hash.append(Path(dirpath) / filename)
+                files_to_hash.append(file_path)
 
     results: list[FileRecord] = []
     with ThreadPoolExecutor(max_workers=threads) as executor:

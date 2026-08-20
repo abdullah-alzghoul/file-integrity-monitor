@@ -112,6 +112,20 @@ class TestHashDirectory(unittest.TestCase):
         self.assertEqual(result[0].size, 4)
         self.assertEqual(result[0].algorithm, "sha256")
 
+    def test_skips_symlinks(self):
+        target = Path(self.temp_dir) / "target.txt"
+        target.write_text("real content")
+        link = Path(self.temp_dir) / "link.txt"
+
+        try:
+            link.symlink_to(target)
+        except OSError:
+            self.skipTest("symlinks not supported on this platform")
+
+        result = hash_directory(self.temp_dir, RuleSet([]), threads=1)
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0].path, str(target))
+
 
 if __name__ == "__main__":
     unittest.main()
