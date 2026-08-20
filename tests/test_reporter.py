@@ -230,7 +230,7 @@ class TestReportOutputPath(unittest.TestCase):
 
         try:
             report(result, "console", output_path=path)
-            with open(path, "r") as f:
+            with open(path) as f:
                 content = f.read()
             self.assertIn("No changes detected", content)
         finally:
@@ -311,8 +311,9 @@ class TestCsvSanitization(unittest.TestCase):
 
 class TestUtilityFunctions(unittest.TestCase):
     def test_to_dict_with_path(self):
-        from fim.reporter import _to_dict
         from pathlib import Path
+
+        from fim.reporter import _to_dict
         result = _to_dict(Path("test.txt"))
         self.assertEqual(result, "test.txt")
 

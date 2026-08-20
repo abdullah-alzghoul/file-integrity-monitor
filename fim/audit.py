@@ -11,7 +11,6 @@ import json
 import threading
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Optional
 
 from fim.models import ChangeType, ScanResult
 
@@ -29,9 +28,8 @@ class AuditLogger:
         return datetime.now(timezone.utc).isoformat()
 
     def _write(self, entry: dict) -> None:
-        with self._lock:
-            with open(self._log_path, "a", encoding="utf-8") as f:
-                f.write(json.dumps(entry, separators=(",", ":")) + "\n")
+        with self._lock, open(self._log_path, "a", encoding="utf-8") as f:
+            f.write(json.dumps(entry, separators=(",", ":")) + "\n")
 
     def log_baseline_created(
         self,
@@ -56,7 +54,7 @@ class AuditLogger:
     def log_scan_started(
         self,
         scan_path: str,
-        baseline_path: Optional[str],
+        baseline_path: str | None,
     ) -> None:
         self._write(
             {

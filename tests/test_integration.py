@@ -42,7 +42,7 @@ class TestIntegration(unittest.TestCase):
         rc = run(["scan", self.scan_dir, "-b", self.baseline_path, "-f", "json", "-o", report_path])
         self.assertEqual(rc, 1)
 
-        with open(report_path, "r") as f:
+        with open(report_path) as f:
             data = json.load(f)
         self.assertEqual(data["scan_path"], self.scan_dir)
         self.assertEqual(len(data["changes"]), 1)
@@ -70,7 +70,7 @@ class TestIntegration(unittest.TestCase):
         rc = run(["scan", self.scan_dir, "-b", self.baseline_path, "-f", "csv", "-o", report_path])
         self.assertEqual(rc, 0)
 
-        with open(report_path, "r") as f:
+        with open(report_path) as f:
             content = f.read()
         self.assertIn("timestamp", content)
         self.assertIn("scan_path", content)
@@ -84,7 +84,7 @@ class TestIntegration(unittest.TestCase):
         rc = run(["scan", self.scan_dir, "-b", self.baseline_path, "-f", "html", "-o", report_path])
         self.assertEqual(rc, 0)
 
-        with open(report_path, "r") as f:
+        with open(report_path) as f:
             content = f.read()
         self.assertIn("<!DOCTYPE html>", content)
         self.assertIn("File Integrity Monitor Report", content)

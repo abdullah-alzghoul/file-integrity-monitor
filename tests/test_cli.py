@@ -32,13 +32,13 @@ class TestBaselineCommand(unittest.TestCase):
             json.dump({"exclude": ["*.tmp"]}, f)
         rc = run(["baseline", self.scan_dir, "-o", self.baseline_path, "--config", config_path])
         self.assertEqual(rc, 0)
-        with open(self.baseline_path, "r") as f:
+        with open(self.baseline_path) as f:
             data = json.load(f)
         paths = {r["path"] for r in data["records"]}
         basenames = {os.path.basename(p) for p in paths}
         self.assertIn("keep.txt", basenames)
         self.assertNotIn("ignore.tmp", basenames)
-        
+
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
         self.scan_dir = os.path.join(self.temp_dir, "scan")
@@ -65,7 +65,7 @@ class TestBaselineCommand(unittest.TestCase):
         (Path(self.scan_dir) / "file.txt").write_text("content")
         rc = run(["baseline", self.scan_dir, "-o", self.baseline_path, "-k", "secret"])
         self.assertEqual(rc, 0)
-        with open(self.baseline_path, "r") as f:
+        with open(self.baseline_path) as f:
             data = json.load(f)
         self.assertIn("signature", data)
 
@@ -77,7 +77,7 @@ class TestBaselineCommand(unittest.TestCase):
             f.write("*.tmp\n")
         rc = run(["baseline", self.scan_dir, "-o", self.baseline_path, "-r", rules_path])
         self.assertEqual(rc, 0)
-        with open(self.baseline_path, "r") as f:
+        with open(self.baseline_path) as f:
             data = json.load(f)
         paths = {r["path"] for r in data["records"]}
         basenames = {os.path.basename(p) for p in paths}
@@ -92,7 +92,7 @@ class TestBaselineCommand(unittest.TestCase):
             f.write("mysecretkey")
         rc = run(["baseline", self.scan_dir, "-o", self.baseline_path, "--key-file", key_path])
         self.assertEqual(rc, 0)
-        with open(self.baseline_path, "r") as f:
+        with open(self.baseline_path) as f:
             data = json.load(f)
         self.assertIn("signature", data)
 
@@ -131,7 +131,7 @@ class TestScanCommand(unittest.TestCase):
         rc = run(["scan", self.scan_dir, "-b", self.baseline_path, "-f", "json", "-o", report_path])
         self.assertEqual(rc, 0)
         self.assertTrue(os.path.exists(report_path))
-        with open(report_path, "r") as f:
+        with open(report_path) as f:
             data = json.load(f)
         self.assertEqual(data["scan_path"], self.scan_dir)
 

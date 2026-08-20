@@ -10,7 +10,6 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Optional
 
 from fim.crypto import sign, verify
 from fim.models import FileRecord
@@ -48,7 +47,7 @@ def save_baseline(
     path: str | Path,
     records: list[FileRecord],
     algorithm: str,
-    key: Optional[str] = None,
+    key: str | None = None,
 ) -> None:
     """Write baseline to path as JSON. Signs with HMAC if key is provided."""
     payload = _canonical_payload(records, algorithm)
@@ -66,14 +65,14 @@ def save_baseline(
 
 def load_baseline(
     path: str | Path,
-    key: Optional[str] = None,
+    key: str | None = None,
 ) -> tuple[list[FileRecord], str]:
     """Load baseline from path. Verifies HMAC if signature is present.
 
     Returns (records, algorithm).
     Raises ValueError if signature verification fails or baseline is malformed.
     """
-    with open(path, "r", encoding="utf-8") as f:
+    with open(path, encoding="utf-8") as f:
         data = json.load(f)
 
     if not isinstance(data, dict):

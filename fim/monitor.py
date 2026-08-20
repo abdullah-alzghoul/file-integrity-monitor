@@ -5,7 +5,6 @@ from __future__ import annotations
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Optional
 
 from fim.audit import AuditLogger
 from fim.hasher import hash_directory
@@ -22,8 +21,8 @@ def create_baseline(
     rules: RuleSet,
     algorithm: str,
     threads: int,
-    key: Optional[str],
-    audit_logger: Optional[AuditLogger],
+    key: str | None,
+    audit_logger: AuditLogger | None,
 ) -> None:
     """Create a new baseline by hashing all files under scan_path."""
     path = Path(scan_path)
@@ -50,8 +49,8 @@ def scan_directory(
     rules: RuleSet,
     algorithm: str,
     threads: int,
-    key: Optional[str],
-    audit_logger: Optional[AuditLogger],
+    key: str | None,
+    audit_logger: AuditLogger | None,
 ) -> ScanResult:
     """Scan scan_path and compare against baseline. Return ScanResult."""
     path = Path(scan_path)

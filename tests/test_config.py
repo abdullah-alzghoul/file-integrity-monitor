@@ -6,7 +6,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from fim.config import Config, load_config
+from fim.config import load_config
 
 
 class TestConfigValidation(unittest.TestCase):

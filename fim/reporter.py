@@ -8,9 +8,9 @@ import json
 from dataclasses import fields, is_dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
-from fim.models import Change, ChangeType, ScanResult
+from fim.models import ChangeType, ScanResult
 
 __all__ = ["report"]
 
@@ -261,7 +261,7 @@ def _html_report(result: ScanResult) -> str:
 </html>"""
 
 
-def report(result: ScanResult, format: str, output_path: Optional[str] = None) -> str:
+def report(result: ScanResult, format: str, output_path: str | None = None) -> str:
     """Generate a report from a ScanResult.
 
     Supported formats: console, json, csv, html.

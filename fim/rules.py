@@ -46,7 +46,7 @@ def load_rules(path: str | Path | None) -> RuleSet:
         return RuleSet([])
 
     excludes: list[str] = []
-    with open(rules_path, "r", encoding="utf-8") as f:
+    with open(rules_path, encoding="utf-8") as f:
         for line in f:
             stripped = line.strip()
             if not stripped or stripped.startswith("#"):

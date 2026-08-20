@@ -6,7 +6,6 @@ import json
 import os
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Optional
 
 __all__ = ["Config", "load_config"]
 
@@ -14,15 +13,15 @@ __all__ = ["Config", "load_config"]
 @dataclass(frozen=True, slots=True)
 class Config:
     scan_path: str
-    baseline_path: Optional[str]
-    output_path: Optional[str]
+    baseline_path: str | None
+    output_path: str | None
     format: str
     algorithm: str
     threads: int
-    key: Optional[str]
-    rules_path: Optional[str]
+    key: str | None
+    rules_path: str | None
     audit_log: str
-    config_path: Optional[str]
+    config_path: str | None
     exclude: list[str] = field(default_factory=list)
 
     def __post_init__(self):
@@ -39,15 +38,15 @@ class Config:
 def load_config(
     *,
     scan_path: str = ".",
-    baseline_path: Optional[str] = None,
-    output_path: Optional[str] = None,
+    baseline_path: str | None = None,
+    output_path: str | None = None,
     format: str = "console",
     algorithm: str = "sha256",
     threads: int = 4,
-    key: Optional[str] = None,
-    rules_path: Optional[str] = None,
+    key: str | None = None,
+    rules_path: str | None = None,
     audit_log: str = "fim-audit.log",
-    config_path: Optional[str] = None,
+    config_path: str | None = None,
     **overrides,
 ) -> Config:
     """Load configuration from CLI args, environment variables, and JSON config file.
@@ -72,7 +71,7 @@ def load_config(
     if config_path:
         path = Path(config_path)
         if path.exists():
-            with open(path, "r", encoding="utf-8") as f:
+            with open(path, encoding="utf-8") as f:
                 file_config = json.load(f)
 
     env_keys = {
@@ -102,7 +101,7 @@ def load_config(
     key_value = merged.get("key")
     if isinstance(key_value, str) and key_value.startswith("@"):
         key_file = key_value[1:]
-        with open(key_file, "r", encoding="utf-8") as f:
+        with open(key_file, encoding="utf-8") as f:
             merged["key"] = f.read().strip()
 
     # Inline exclude patterns from config file (no env var support)

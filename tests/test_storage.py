@@ -4,10 +4,9 @@ import json
 import os
 import tempfile
 import unittest
-from pathlib import Path
 
 from fim.models import FileRecord
-from fim.storage import save_baseline, load_baseline, BASELINE_VERSION
+from fim.storage import BASELINE_VERSION, load_baseline, save_baseline
 
 
 class TestSaveBaseline(unittest.TestCase):
@@ -25,7 +24,7 @@ class TestSaveBaseline(unittest.TestCase):
 
         try:
             save_baseline(path, [record], "sha256")
-            with open(path, "r") as f:
+            with open(path) as f:
                 data = json.load(f)
             self.assertEqual(data["version"], BASELINE_VERSION)
             self.assertEqual(data["algorithm"], "sha256")
@@ -48,7 +47,7 @@ class TestSaveBaseline(unittest.TestCase):
 
         try:
             save_baseline(path, [record], "sha256", key="secret")
-            with open(path, "r") as f:
+            with open(path) as f:
                 data = json.load(f)
             self.assertIn("signature", data)
             self.assertEqual(len(data["signature"]), 64)
@@ -63,7 +62,7 @@ class TestSaveBaseline(unittest.TestCase):
 
         try:
             save_baseline(path, [r1, r2], "sha256")
-            with open(path, "r") as f:
+            with open(path) as f:
                 data = json.load(f)
             paths = [r["path"] for r in data["records"]]
             self.assertEqual(paths, ["a.txt", "b.txt"])

@@ -7,7 +7,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from fim.hasher import hash_file, hash_directory
+from fim.hasher import hash_directory, hash_file
 from fim.rules import RuleSet
 
 

@@ -3,9 +3,8 @@
 import os
 import tempfile
 import unittest
-from pathlib import Path
 
-from fim.diff import generate_diff_preview, _is_binary
+from fim.diff import _is_binary, generate_diff_preview
 
 
 class TestIsBinary(unittest.TestCase):

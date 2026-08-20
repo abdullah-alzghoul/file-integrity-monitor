@@ -1,7 +1,8 @@
 ﻿"""Tests for fim.models — core data model classes."""
 
 import unittest
-from fim.models import ChangeType, FileRecord, ScanResult, Change
+
+from fim.models import Change, ChangeType, FileRecord, ScanResult
 
 
 class TestChangeType(unittest.TestCase):

@@ -10,7 +10,6 @@ import hashlib
 import os
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
-from typing import Optional
 
 from fim.models import FileRecord
 from fim.rules import RuleSet
@@ -30,7 +29,7 @@ def hash_file(path: str | Path, algorithm: str = "sha256") -> str:
     return hasher.hexdigest()
 
 
-def _hash_single(path: Path, algorithm: str) -> Optional[FileRecord]:
+def _hash_single(path: Path, algorithm: str) -> FileRecord | None:
     """Hash a single file and return its FileRecord, or None if unreadable."""
     try:
         stat = path.stat()

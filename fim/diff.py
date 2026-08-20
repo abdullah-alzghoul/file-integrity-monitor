@@ -34,9 +34,9 @@ def generate_diff_preview(
         return None
 
     try:
-        with open(old_path, "r", encoding="utf-8", errors="replace") as f:
+        with open(old_path, encoding="utf-8", errors="replace") as f:
             old_lines = f.read().splitlines()
-        with open(new_path, "r", encoding="utf-8", errors="replace") as f:
+        with open(new_path, encoding="utf-8", errors="replace") as f:
             new_lines = f.read().splitlines()
     except (OSError, PermissionError):  # pragma: no cover (POSIX-only)
         return True

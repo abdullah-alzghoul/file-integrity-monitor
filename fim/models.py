@@ -5,7 +5,6 @@ from __future__ import annotations
 import enum
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
 
 __all__ = ["ChangeType", "FileRecord", "Change", "ScanResult"]
 
@@ -35,14 +34,14 @@ class FileRecord:
 @dataclass(frozen=True, slots=True)
 class Change:
     change_type: ChangeType
-    record: Optional[FileRecord]
-    previous_record: Optional[FileRecord]
-    diff_preview: Optional[str] = None
+    record: FileRecord | None
+    previous_record: FileRecord | None
+    diff_preview: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
 class ScanResult:
-    baseline_path: Optional[str]
+    baseline_path: str | None
     scan_path: str
     changes: list[Change]
     timestamp: str

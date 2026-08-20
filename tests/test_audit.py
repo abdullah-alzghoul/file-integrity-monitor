@@ -4,7 +4,6 @@ import json
 import os
 import tempfile
 import unittest
-from pathlib import Path
 
 from fim.audit import AuditLogger
 from fim.models import Change, ChangeType, FileRecord, ScanResult
@@ -12,15 +11,15 @@ from fim.models import Change, ChangeType, FileRecord, ScanResult
 
 class TestAuditLogger(unittest.TestCase):
     def setUp(self):
-        self.temp_file = tempfile.NamedTemporaryFile(mode="w", delete=False)
-        self.temp_file.close()
-        self.logger = AuditLogger(self.temp_file.name)
+        with tempfile.NamedTemporaryFile(mode="w", delete=False) as f:
+            self.log_path = f.name
+        self.logger = AuditLogger(self.log_path)
 
     def tearDown(self):
-        os.unlink(self.temp_file.name)
+        os.unlink(self.log_path)
 
     def _read_lines(self):
-        with open(self.temp_file.name, "r") as f:
+        with open(self.temp_file.name) as f:
             return [json.loads(line) for line in f if line.strip()]
 
     def test_log_baseline_created(self):
