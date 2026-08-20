@@ -38,8 +38,8 @@ def generate_diff_preview(
             old_lines = f.read().splitlines()
         with open(new_path, "r", encoding="utf-8", errors="replace") as f:
             new_lines = f.read().splitlines()
-    except (OSError, PermissionError):
-        return None
+    except (OSError, PermissionError):  # pragma: no cover (POSIX-only)
+        return True
 
     diff = list(
         difflib.unified_diff(

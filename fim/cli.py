@@ -165,8 +165,6 @@ def run(argv: list[str] | None = None) -> int:
         print(f"Unexpected error: {e}", file=sys.stderr)
         return 2
 
-    return 2
-
 
 def main() -> None:
     sys.exit(run())

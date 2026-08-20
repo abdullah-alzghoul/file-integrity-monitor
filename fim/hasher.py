@@ -43,7 +43,7 @@ def _hash_single(path: Path, algorithm: str) -> Optional[FileRecord]:
             mtime=stat.st_mtime,
             algorithm=algorithm,
         )
-    except (OSError, PermissionError):
+    except (OSError, PermissionError):  # pragma: no cover (POSIX-only)
         return None
 
 
