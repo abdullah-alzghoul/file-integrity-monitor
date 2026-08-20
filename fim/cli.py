@@ -9,7 +9,7 @@ from fim.audit import AuditLogger
 from fim.config import load_config
 from fim.monitor import create_baseline, scan_directory
 from fim.reporter import report
-from fim.rules import load_rules
+from fim.rules import load_rules, RuleSet
 
 __all__ = ["main", "run"]
 
