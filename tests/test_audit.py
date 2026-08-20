@@ -19,7 +19,7 @@ class TestAuditLogger(unittest.TestCase):
         os.unlink(self.log_path)
 
     def _read_lines(self):
-        with open(self.temp_file.name) as f:
+        with open(self.log_path) as f:
             return [json.loads(line) for line in f if line.strip()]
 
     def test_log_baseline_created(self):
