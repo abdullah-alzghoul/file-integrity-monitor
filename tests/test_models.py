@@ -1,4 +1,4 @@
-﻿"""Tests for fim.models."""
+﻿"""Tests for fim.models — core data model classes."""
 
 import unittest
 from fim.models import ChangeType, FileRecord, ScanResult, Change

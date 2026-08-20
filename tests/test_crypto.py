@@ -1,4 +1,4 @@
-"""Tests for fim.crypto."""
+"""Tests for fim.crypto — HMAC signing and verification."""
 
 import unittest
 

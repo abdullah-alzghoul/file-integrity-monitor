@@ -8,14 +8,14 @@ import json
 from dataclasses import fields, is_dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Optional
+from typing import Any, Optional
 
 from fim.models import Change, ChangeType, ScanResult
 
 __all__ = ["report"]
 
 
-def _to_dict(obj):
+def _to_dict(obj) -> Any:
     """Recursively convert dataclasses, enums, and paths to JSON-serializable types."""
     if obj is None:
         return None

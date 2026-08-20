@@ -1,4 +1,4 @@
-"""Tests for fim.cli."""
+"""Tests for fim.cli — command-line interface entry point."""
 
 import json
 import os

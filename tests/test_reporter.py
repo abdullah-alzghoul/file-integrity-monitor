@@ -1,4 +1,4 @@
-"""Tests for fim.reporter."""
+"""Tests for fim.reporter — output formatting for console, JSON, CSV, and HTML."""
 
 import csv
 import io

@@ -1,4 +1,4 @@
-"""Tests for fim.diff."""
+"""Tests for fim.diff — unified diff preview generation."""
 
 import os
 import tempfile

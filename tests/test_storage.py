@@ -1,4 +1,4 @@
-"""Tests for fim.storage."""
+"""Tests for fim.storage — baseline JSON persistence with HMAC signing."""
 
 import json
 import os

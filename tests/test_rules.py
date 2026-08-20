@@ -1,4 +1,4 @@
-"""Tests for fim.rules."""
+"""Tests for fim.rules — pattern-based file filtering."""
 
 import tempfile
 import unittest

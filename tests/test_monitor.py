@@ -1,4 +1,4 @@
-"""Tests for fim.monitor."""
+"""Tests for fim.monitor — core scanning and change detection engine."""
 
 import os
 import shutil

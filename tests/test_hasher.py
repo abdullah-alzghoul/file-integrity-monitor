@@ -1,4 +1,4 @@
-"""Tests for fim.hasher."""
+"""Tests for fim.hasher — cryptographic file hashing."""
 
 import hashlib
 import os

@@ -1,4 +1,4 @@
-﻿"""Tests for fim.config."""
+﻿"""Tests for fim.config — configuration loading and validation."""
 
 import json
 import os

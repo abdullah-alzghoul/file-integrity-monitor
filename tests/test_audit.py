@@ -1,4 +1,4 @@
-"""Tests for fim.audit."""
+"""Tests for fim.audit — append-only audit logging."""
 
 import json
 import os
