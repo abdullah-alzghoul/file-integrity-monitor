@@ -181,7 +181,8 @@ python -m pytest tests\ -q
 ### Coverage
 
 ```powershell
-python -m pytest --cov=fim --cov-report=term-missing --cov-branch tests```
+python -m pytest --cov=fim --cov-report=term-missing --cov-branch tests
+```
 
 ### Linting
 
