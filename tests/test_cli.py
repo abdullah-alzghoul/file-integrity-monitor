@@ -2,13 +2,12 @@
 
 import json
 import os
-import shutil
-import stat
 import tempfile
 import unittest
 from pathlib import Path
 
 from fim.cli import run
+from tests._util import rmtree_force
 
 
 class TestBaselineCommand(unittest.TestCase):
@@ -46,10 +45,7 @@ class TestBaselineCommand(unittest.TestCase):
         self.baseline_path = os.path.join(self.temp_dir, "baseline.json")
 
     def tearDown(self):
-        def _onexc(func, path, exc_info):
-            os.chmod(path, stat.S_IWRITE)
-            func(path)
-        shutil.rmtree(self.temp_dir, onexc=_onexc)
+        rmtree_force(self.temp_dir)
 
     def test_baseline_creates_file(self):
         (Path(self.scan_dir) / "file.txt").write_text("content")
@@ -105,10 +101,7 @@ class TestScanCommand(unittest.TestCase):
         self.baseline_path = os.path.join(self.temp_dir, "baseline.json")
 
     def tearDown(self):
-        def _onexc(func, path, exc_info):
-            os.chmod(path, stat.S_IWRITE)
-            func(path)
-        shutil.rmtree(self.temp_dir, onexc=_onexc)
+        rmtree_force(self.temp_dir)
 
     def _create_baseline(self):
         (Path(self.scan_dir) / "file.txt").write_text("content")

@@ -10,7 +10,7 @@ from pathlib import Path
 __all__ = ["Config", "load_config"]
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(frozen=True)
 class Config:
     scan_path: str
     baseline_path: str | None

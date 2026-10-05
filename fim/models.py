@@ -17,7 +17,7 @@ class ChangeType(enum.Enum):
     PERMISSION_CHANGED = "permission_changed"
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(frozen=True)
 class FileRecord:
     path: str
     hash: str
@@ -31,7 +31,7 @@ class FileRecord:
         return Path(self.path)
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(frozen=True)
 class Change:
     change_type: ChangeType
     record: FileRecord | None
@@ -39,7 +39,7 @@ class Change:
     diff_preview: str | None = None
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(frozen=True)
 class ScanResult:
     baseline_path: str | None
     scan_path: str

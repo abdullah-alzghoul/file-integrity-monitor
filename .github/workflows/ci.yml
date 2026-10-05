@@ -24,7 +24,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pytest pytest-cov ruff pip-audit
+          pip install pytest pytest-cov ruff
 
       - name: Lint with ruff
         run: ruff check .
@@ -33,4 +33,7 @@ jobs:
         run: pytest --cov=fim --cov-report=term-missing
 
       - name: Audit dependencies
-        run: pip-audit
+        if: matrix.python-version == '3.12'
+        run: |
+          python -m pip install pip-audit
+          pip-audit

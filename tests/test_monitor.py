@@ -2,7 +2,6 @@
 
 import os
 import shutil
-import stat
 import tempfile
 import unittest
 from pathlib import Path
@@ -10,6 +9,7 @@ from pathlib import Path
 from fim.models import ChangeType
 from fim.monitor import create_baseline, scan_directory
 from fim.rules import RuleSet
+from tests._util import rmtree_force
 
 
 class TestCreateBaseline(unittest.TestCase):
@@ -72,10 +72,7 @@ class TestScanDirectory(unittest.TestCase):
         self.baseline_path = os.path.join(self.temp_dir, "baseline.json")
 
     def tearDown(self):
-        def _onexc(func, path, exc_info):
-            os.chmod(path, stat.S_IWRITE)
-            func(path)
-        shutil.rmtree(self.temp_dir, onexc=_onexc)
+        rmtree_force(self.temp_dir)
 
     def _create_baseline(self):
         create_baseline(
