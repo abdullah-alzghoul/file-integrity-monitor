@@ -24,14 +24,14 @@ A Python command-line tool for detecting unauthorized file changes through crypt
 Clone the repository and navigate to the project directory:
 
 ```powershell
-cd C:\devile-integrity-monitor
+cd C:\dev\file-integrity-monitor
 ```
 
 Optional: create a virtual environment:
 
 ```powershell
 python -m venv .venv
-.venv\Scriptsctivate
+.venv\Scripts\Activate.ps1
 ```
 
 No package installation is required -- the tool uses only the Python standard library.
@@ -44,13 +44,13 @@ A baseline is a snapshot of all files in a directory at a point in time.
 
 ```powershell
 # Basic baseline
-python -m fim baseline C:\path	o\monitor -o baseline.json
+python -m fim baseline C:\path\to\monitor -o baseline.json
 
 # Signed baseline (recommended for production)
-python -m fim baseline C:\path	o\monitor -o baseline.json --key-file key.txt
+python -m fim baseline C:\path\to\monitor -o baseline.json --key-file key.txt
 
 # With exclude rules
-python -m fim baseline C:\path	o\monitor -o baseline.json -r rules.txt
+python -m fim baseline C:\path\to\monitor -o baseline.json -r rules.txt
 ```
 
 ### Scanning for Changes
@@ -59,16 +59,16 @@ Compare the current directory state against a baseline:
 
 ```powershell
 # Console output
-python -m fim scan C:\path	o\monitor -b baseline.json
+python -m fim scan C:\path\to\monitor -b baseline.json
 
 # JSON report
-python -m fim scan C:\path	o\monitor -b baseline.json -f json -o report.json
+python -m fim scan C:\path\to\monitor -b baseline.json -f json -o report.json
 
 # HTML report
-python -m fim scan C:\path	o\monitor -b baseline.json -f html -o report.html
+python -m fim scan C:\path\to\monitor -b baseline.json -f html -o report.html
 
 # Verify signed baseline
-python -m fim scan C:\path	o\monitor -b baseline.json --key-file key.txt
+python -m fim scan C:\path\to\monitor -b baseline.json --key-file key.txt
 ```
 
 ### Exit Codes
